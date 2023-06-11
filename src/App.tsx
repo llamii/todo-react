@@ -27,7 +27,12 @@ const App: React.FC = () => {
       <ThemeProvider theme={theme === lightTheme ? lightTheme : darkTheme}>
         <Header>📓 Todo List</Header>
         <TodoList />
-        <Footer>Double click on todo to edit</Footer>
+        <Footer>
+          Double click on todo to edit <br />
+          <a target="_blank" href="https://www.maxim-grinev-resume.ru/">
+            © Maxim Grinev
+          </a>
+        </Footer>
         <ThemeToggle onClick={themeToggler}>
           <DarkModeIcon fontSize="medium" />
         </ThemeToggle>

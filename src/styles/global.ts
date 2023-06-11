@@ -24,6 +24,12 @@ export default createGlobalStyle`
 			color: ${(props) => props.theme.colors.font}
 		}
 
+		a {
+			cursor: pointer;
+			color: ${(props) => props.theme.colors.font};
+			text-decoration: none;
+		}
+
   }
 
 	*:focus {
