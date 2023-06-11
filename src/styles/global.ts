@@ -19,5 +19,14 @@ export default createGlobalStyle`
 		
 		background-color: ${(props) => props.theme.colors.bg};
 		color: ${(props) => props.theme.colors.font};
+
+		h1, h2, h3, h4, h5, h6, span, button, input {
+			color: ${(props) => props.theme.colors.font}
+		}
+
   }
+
+	*:focus {
+    outline: none;
+}
 `;
