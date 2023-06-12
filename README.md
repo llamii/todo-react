@@ -2,6 +2,8 @@
 
 Simple React Todo App
 
+<img src="public/app-pic.png" width="60%">
+
 ## Installation
 
 ```bash
@@ -29,4 +31,3 @@ yarn dev
 2. Filtering and deleting completed todo's
 3. Theme switching
 
-![preview app](public/app-pic.png)
