@@ -103,7 +103,7 @@ export const TodoList: FC = () => {
         <FilterButtons>{filterButtons}</FilterButtons>
         <ClearButton
           $isActive={false}
-          $isVisible={filter === "active" ? false : true}
+          $isVisible={filter === Filter.active ? false : true}
           onClick={removeCompleted}
         >
           Clear Completed
