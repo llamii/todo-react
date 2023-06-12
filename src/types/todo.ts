@@ -5,9 +5,9 @@ export interface ITodo {
 }
 
 export enum Filter {
-	all = 'all',
-	active = 'active',
-	completed = 'completed',
+  all = "all",
+  active = "active",
+  completed = "completed",
 }
 
-export const absurd = (value: never): any => {};
+export const absurd = (_value: never): any => {};
