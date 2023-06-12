@@ -10,6 +10,8 @@ import { styled } from "styled-components";
 import { useTodos } from "../hooks/useTodos";
 
 export const TodoList: FC = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [value, setValue] = useState("");
   const [filter, setFilter] = useState<Filter>(Filter.all);
 
@@ -22,8 +24,6 @@ export const TodoList: FC = () => {
     removeCompleted,
     getItemsLeft,
   } = useTodos(mockTodos);
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const itemsLeft = getItemsLeft();
 
@@ -61,10 +61,6 @@ export const TodoList: FC = () => {
     [todos, filter]
   );
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
   const filterButtons = Object.values(Filter).map((f) => (
     <FilterButton
       key={f}
@@ -74,6 +70,10 @@ export const TodoList: FC = () => {
       {f}
     </FilterButton>
   ));
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   return (
     <TodoListContainer sx={{ display: "flex" }} maxWidth="sm">
