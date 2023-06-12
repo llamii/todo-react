@@ -16,22 +16,20 @@ const App: React.FC = () => {
   };
 
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <Header>📓 Todo List</Header>
-        <TodoList />
-        <Footer>
-          Double click on todo to edit <br />
-          <a target="_blank" href="https://www.maxim-grinev-resume.ru/">
-            © Maxim Grinev
-          </a>
-        </Footer>
-        <ThemeToggle onClick={themeToggle}>
-          <DarkModeIcon fontSize="medium" />
-        </ThemeToggle>
-        <GlobalStyles />
-      </ThemeProvider>
-    </>
+    <ThemeProvider theme={theme}>
+      <Header>📓 Todo List</Header>
+      <TodoList />
+      <Footer>
+        Double click on todo to edit <br />
+        <a target="_blank" href="https://www.maxim-grinev-resume.ru/">
+          © Maxim Grinev
+        </a>
+      </Footer>
+      <ThemeToggle onClick={themeToggle}>
+        <DarkModeIcon fontSize="medium" />
+      </ThemeToggle>
+      <GlobalStyles />
+    </ThemeProvider>
   );
 };
 

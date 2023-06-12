@@ -18,7 +18,6 @@ export const TodoItem: React.FC<ITodoItemProps> = (props) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
-  const [isHover, setIsHover] = useState(false);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedName(event.target.value);
@@ -38,10 +37,7 @@ export const TodoItem: React.FC<ITodoItemProps> = (props) => {
   };
 
   return (
-    <TodoItemWrapper
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-    >
+    <TodoItemWrapper>
       <Checkbox
         disableRipple
         checked={completed}
@@ -66,15 +62,14 @@ export const TodoItem: React.FC<ITodoItemProps> = (props) => {
           {name}
         </TodoText>
       )}
-      {isHover ? (
-        <DeleteButton
-          sx={{ "&:hover": { backgroundColor: "transparent" } }}
-          disableRipple
-          onClick={() => removeTodo(id)}
-        >
-          <DeleteIcon fontSize="small" />
-        </DeleteButton>
-      ) : null}
+
+      <DeleteButton
+        sx={{ "&:hover": { backgroundColor: "transparent" } }}
+        disableRipple
+        onClick={() => removeTodo(id)}
+      >
+        <DeleteIcon fontSize="small" />
+      </DeleteButton>
     </TodoItemWrapper>
   );
 };
@@ -98,6 +93,19 @@ const Input = styled.input`
   background-color: ${(props) => props.theme.colors.secondary};
 `;
 
+const DeleteButton = styled(Button)`
+  && {
+    background-color: transparent;
+    color: ${(props) => props.theme.colors.danger};
+    padding: 5px;
+    margin: 0;
+    display: none;
+    &:hover {
+      background-color: "transparent";
+    }
+  }
+`;
+
 const TodoItemWrapper = styled.div`
   height: 48px;
   display: flex;
@@ -106,6 +114,12 @@ const TodoItemWrapper = styled.div`
   margin-bottom: 8px;
   padding-bottom: 8px;
   border-bottom: 1px solid ${(props) => props.theme.colors.primary};
+
+  &:hover {
+    ${DeleteButton} {
+      display: flex;
+    }
+  }
 `;
 
 const TodoText = styled.span<{ $isChecked: boolean }>`
@@ -113,17 +127,4 @@ const TodoText = styled.span<{ $isChecked: boolean }>`
   margin-right: 8px;
 
   text-decoration: ${(props) => (props.$isChecked ? `line-through` : "none")};
-`;
-
-const DeleteButton = styled(Button)`
-  && {
-    background-color: transparent;
-    color: ${(props) => props.theme.colors.danger};
-    padding: 5px;
-    margin: 0;
-
-    &:hover {
-      background-color: "transparent";
-    }
-  }
 `;

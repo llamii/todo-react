@@ -1,15 +1,17 @@
 import * as React from "react";
+
+import { FilterType, ITodo } from "../types/todo";
 import { useEffect, useMemo, useRef, useState } from "react";
+
 import { Container } from "@mui/material";
 import { TodoItem } from "./TodoItem";
 import { mockTodos } from "../mock/mockTodos";
 import { styled } from "styled-components";
 import { useTodos } from "../hooks/useTodos";
-import { Filter, FilterType } from "../types/todo";
 
 export const TodoList: React.FC = () => {
   const [value, setValue] = useState("");
-  const [filter, setFilter] = useState<FilterType>(Filter.all);
+  const [filter, setFilter] = useState<FilterType>('all');
 
   const {
     todos,
@@ -23,10 +25,8 @@ export const TodoList: React.FC = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
+  const itemsLeft = getItemsLeft();
+	
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setValue(event.target.value);
   };
@@ -47,16 +47,24 @@ export const TodoList: React.FC = () => {
   const filteredTodos = useMemo(
     () =>
       todos.filter((todo) => {
-        if (filter === Filter.active) {
-          return !todo.completed;
-        }
-        if (filter === Filter.completed) {
-          return todo.completed;
-        }
-        return true;
-      }),
+				switch(filter) {
+					case 'active':
+						return !todo.completed;
+
+					case 'completed':
+						return todo.completed;
+
+					case "all":
+						return true;
+				} 
+		}),
     [todos, filter]
   );
+
+	useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
 
   return (
     <TodoListContainer sx={{ display: "flex" }} maxWidth="sm">
@@ -66,42 +74,46 @@ export const TodoList: React.FC = () => {
         onKeyDown={handleKeyDown}
         onChange={handleChange}
         ref={inputRef}
-      ></Input>
+      />
 
-      {filteredTodos.map((todo) => (
+      {filteredTodos && filteredTodos.map((todo: ITodo) => (
         <TodoItem
           toggleTodo={toggleTodo}
           editTodo={editTodo}
           removeTodo={removeTodo}
           key={todo.id}
-          {...todo}
+					id={todo.id}
+					name={todo.name}
+					completed={todo.completed}
         />
       ))}
+			
       <TodoFooter>
-        <ItemsLeft>{getItemsLeft().toString()} item(s) left</ItemsLeft>
+        <ItemsLeft>{itemsLeft} item(s) left</ItemsLeft>
         <FilterButtons>
           <FilterButton
-            $isActive={filter === Filter.all}
-            onClick={() => handleChangeFilter(Filter.all)}
+            $isActive={filter === 'all'}
+            onClick={() => handleChangeFilter('all')}
           >
             All
           </FilterButton>
           <FilterButton
-            $isActive={filter === Filter.active}
-            onClick={() => handleChangeFilter(Filter.active)}
+						
+            $isActive={filter === 'active'}
+            onClick={() => handleChangeFilter('active')}
           >
             Active
           </FilterButton>
           <FilterButton
-            $isActive={filter === Filter.completed}
-            onClick={() => handleChangeFilter(Filter.completed)}
+            $isActive={filter === 'completed'}
+            onClick={() => handleChangeFilter('completed')}
           >
             Completed
           </FilterButton>
         </FilterButtons>
-        <ClearButton $isActive={false} onClick={removeCompleted}>
-          Clear Completed
-        </ClearButton>
+          <ClearButton $isActive={false} $isVisible={filter === 'active' ? false : true} onClick={removeCompleted}>
+            Clear Completed
+          </ClearButton>
       </TodoFooter>
     </TodoListContainer>
   );
@@ -129,7 +141,7 @@ const Input = styled.input`
   background-color: ${(props) => props.theme.colors.secondary};
 `;
 
-const FilterButton = styled.button<{ $isActive: boolean }>`
+const FilterButton = styled.button<{ $isActive: boolean}>`
   background-color: transparent;
   border: none;
   padding: 10px 15px;
@@ -139,6 +151,8 @@ const FilterButton = styled.button<{ $isActive: boolean }>`
 
   border: ${(props) =>
     props.$isActive ? `1px solid ${props.theme.colors.primary}` : "none"};
+
+  
 
   border-radius: 10px;
 
@@ -165,7 +179,8 @@ const ItemsLeft = styled.span`
   font-size: 12px;
 `;
 
-const ClearButton = styled(FilterButton)`
+const ClearButton = styled(FilterButton)<{$isVisible: boolean}>`
   font-size: 12px;
   background-color: transparent;
+	visibility: ${(props) => props.$isVisible ? `visible` : "hidden"};
 `;

@@ -5,9 +5,3 @@ export interface ITodo {
 }
 
 export type FilterType = "all" | "active" | "completed";
-
-export enum Filter {
-  all = "all",
-  active = "active",
-  completed = "completed",
-}
