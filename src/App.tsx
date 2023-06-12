@@ -2,12 +2,13 @@ import { DefaultTheme, ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "./styles/theme";
 
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { FC } from "react";
 import GlobalStyles from "../src/styles/global";
 import { TodoList } from "./components/TodoList";
 import styled from "styled-components";
 import useLocalStorage from "./hooks/useLocalStorage";
 
-const App: React.FC = () => {
+const App: FC = () => {
   const [theme, setTheme] = useLocalStorage<DefaultTheme>("theme", lightTheme);
 
   const themeToggle = () => {

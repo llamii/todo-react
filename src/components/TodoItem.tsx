@@ -1,5 +1,5 @@
 import { Button, Checkbox } from "@mui/material";
-import React, { useState } from "react";
+import { FC, useState } from "react";
 
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -13,7 +13,7 @@ interface ITodoItemProps extends ITodo {
   removeTodo: (id: number) => void;
 }
 
-export const TodoItem: React.FC<ITodoItemProps> = (props) => {
+export const TodoItem: FC<ITodoItemProps> = (props) => {
   const { id, name, completed, toggleTodo, editTodo, removeTodo } = props;
 
   const [isEditing, setIsEditing] = useState(false);

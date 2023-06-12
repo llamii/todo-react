@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { FilterType, ITodo } from "../types/todo";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { Filter, ITodo, absurd } from "../types/todo";
 
 import { Container } from "@mui/material";
 import { TodoItem } from "./TodoItem";
@@ -9,9 +9,9 @@ import { mockTodos } from "../mock/mockTodos";
 import { styled } from "styled-components";
 import { useTodos } from "../hooks/useTodos";
 
-export const TodoList: React.FC = () => {
+export const TodoList: FC = () => {
   const [value, setValue] = useState("");
-  const [filter, setFilter] = useState<FilterType>('all');
+  const [filter, setFilter] = useState<Filter>(Filter.all);
 
   const {
     todos,
@@ -26,7 +26,7 @@ export const TodoList: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const itemsLeft = getItemsLeft();
-	
+
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setValue(event.target.value);
   };
@@ -40,31 +40,40 @@ export const TodoList: React.FC = () => {
     }
   };
 
-  const handleChangeFilter = (filter: FilterType) => {
+  const handleChangeFilter = (filter: Filter) => {
     setFilter(filter);
   };
 
   const filteredTodos = useMemo(
     () =>
       todos.filter((todo) => {
-				switch(filter) {
-					case 'active':
-						return !todo.completed;
-
-					case 'completed':
-						return todo.completed;
-
-					case "all":
-						return true;
-				} 
-		}),
+        switch (filter) {
+          case Filter.active:
+            return !todo.completed;
+          case Filter.completed:
+            return todo.completed;
+          case Filter.all:
+            return true;
+          default:
+            return absurd(filter);
+        }
+      }),
     [todos, filter]
   );
 
-	useEffect(() => {
+  useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
+  const filterButtons = Object.values(Filter).map((f) => (
+    <FilterButton
+      key={f}
+      onClick={() => handleChangeFilter(f)}
+      $isActive={f === filter}
+    >
+      {f}
+    </FilterButton>
+  ));
 
   return (
     <TodoListContainer sx={{ display: "flex" }} maxWidth="sm">
@@ -76,44 +85,29 @@ export const TodoList: React.FC = () => {
         ref={inputRef}
       />
 
-      {filteredTodos && filteredTodos.map((todo: ITodo) => (
-        <TodoItem
-          toggleTodo={toggleTodo}
-          editTodo={editTodo}
-          removeTodo={removeTodo}
-          key={todo.id}
-					id={todo.id}
-					name={todo.name}
-					completed={todo.completed}
-        />
-      ))}
-			
+      {filteredTodos &&
+        filteredTodos.map((todo: ITodo) => (
+          <TodoItem
+            toggleTodo={toggleTodo}
+            editTodo={editTodo}
+            removeTodo={removeTodo}
+            key={todo.id}
+            id={todo.id}
+            name={todo.name}
+            completed={todo.completed}
+          />
+        ))}
+
       <TodoFooter>
         <ItemsLeft>{itemsLeft} item(s) left</ItemsLeft>
-        <FilterButtons>
-          <FilterButton
-            $isActive={filter === 'all'}
-            onClick={() => handleChangeFilter('all')}
-          >
-            All
-          </FilterButton>
-          <FilterButton
-						
-            $isActive={filter === 'active'}
-            onClick={() => handleChangeFilter('active')}
-          >
-            Active
-          </FilterButton>
-          <FilterButton
-            $isActive={filter === 'completed'}
-            onClick={() => handleChangeFilter('completed')}
-          >
-            Completed
-          </FilterButton>
-        </FilterButtons>
-          <ClearButton $isActive={false} $isVisible={filter === 'active' ? false : true} onClick={removeCompleted}>
-            Clear Completed
-          </ClearButton>
+        <FilterButtons>{filterButtons}</FilterButtons>
+        <ClearButton
+          $isActive={false}
+          $isVisible={filter === "active" ? false : true}
+          onClick={removeCompleted}
+        >
+          Clear Completed
+        </ClearButton>
       </TodoFooter>
     </TodoListContainer>
   );
@@ -141,7 +135,7 @@ const Input = styled.input`
   background-color: ${(props) => props.theme.colors.secondary};
 `;
 
-const FilterButton = styled.button<{ $isActive: boolean}>`
+const FilterButton = styled.button<{ $isActive: boolean }>`
   background-color: transparent;
   border: none;
   padding: 10px 15px;
@@ -151,9 +145,6 @@ const FilterButton = styled.button<{ $isActive: boolean}>`
 
   border: ${(props) =>
     props.$isActive ? `1px solid ${props.theme.colors.primary}` : "none"};
-
-  
-
   border-radius: 10px;
 
   &:last-child {
@@ -179,8 +170,8 @@ const ItemsLeft = styled.span`
   font-size: 12px;
 `;
 
-const ClearButton = styled(FilterButton)<{$isVisible: boolean}>`
+const ClearButton = styled(FilterButton)<{ $isVisible: boolean }>`
   font-size: 12px;
   background-color: transparent;
-	visibility: ${(props) => props.$isVisible ? `visible` : "hidden"};
+  visibility: ${(props) => (props.$isVisible ? `visible` : "hidden")};
 `;
