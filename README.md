@@ -29,4 +29,4 @@ yarn dev
 2. Filtering and deleting completed todo's
 3. Theme switching
 
-![preview app](src/assets/app-pic.png)
+![preview app](public/assets/app-pic.png)
