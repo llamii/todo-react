@@ -60,7 +60,7 @@ export const TodoItem: React.FC<ITodoItemProps> = (props) => {
         />
       ) : (
         <TodoText
-          isChecked={completed}
+          $isChecked={completed}
           onDoubleClick={() => setIsEditing(true)}
         >
           {name}
@@ -108,11 +108,11 @@ const TodoItemWrapper = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.colors.primary};
 `;
 
-const TodoText = styled.span<{ isChecked: boolean }>`
+const TodoText = styled.span<{ $isChecked: boolean }>`
   flex-grow: 1;
   margin-right: 8px;
 
-  text-decoration: ${(props) => (props.isChecked ? `line-through` : "none")};
+  text-decoration: ${(props) => (props.$isChecked ? `line-through` : "none")};
 `;
 
 const DeleteButton = styled(Button)`
