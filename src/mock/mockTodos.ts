@@ -16,4 +16,14 @@ export const mockTodos: ITodo[] = [
     name: '🌼 To water flowers',
     completed: true,
   },
+  {
+    id: 4,
+    name: '🐕 To feed the dog',
+    completed: false,
+  },
+  {
+    id: 5,
+    name: '⚛️ To code a react app',
+    completed: true,
+  },
 ];

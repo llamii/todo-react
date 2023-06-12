@@ -91,6 +91,7 @@ const Input = styled.input`
 `;
 
 const TodoItemWrapper = styled.div`
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,30 +1,23 @@
 import GlobalStyles from '../src/styles/global';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
-import { useEffect, useState } from 'react';
+
 import { lightTheme, darkTheme } from './styles/theme';
 import { TodoList } from './components/TodoList';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import styled from 'styled-components';
+import useLocalStorage from './hooks/useLocalStorage';
 
 const App: React.FC = () => {
-  const [theme, setTheme] = useState<DefaultTheme>(lightTheme);
+  const [theme, setTheme] = useLocalStorage<DefaultTheme>('theme', lightTheme);
 
-  useEffect(() => {
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme) {
-      setTheme(storedTheme === 'light' ? lightTheme : darkTheme);
-    }
-  }, []);
-
-  const themeToggler = () => {
+  const themeToggle = () => {
     const newTheme = theme === lightTheme ? darkTheme : lightTheme;
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme.type);
   };
 
   return (
     <>
-      <ThemeProvider theme={theme === lightTheme ? lightTheme : darkTheme}>
+      <ThemeProvider theme={theme}>
         <Header>📓 Todo List</Header>
         <TodoList />
         <Footer>
@@ -33,7 +26,7 @@ const App: React.FC = () => {
             © Maxim Grinev
           </a>
         </Footer>
-        <ThemeToggle onClick={themeToggler}>
+        <ThemeToggle onClick={themeToggle}>
           <DarkModeIcon fontSize="medium" />
         </ThemeToggle>
         <GlobalStyles />

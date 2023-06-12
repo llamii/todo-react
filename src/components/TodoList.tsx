@@ -1,16 +1,19 @@
 import * as React from 'react';
 import { TodoItem } from './TodoItem';
-import { Filter, FilterType, ITodo } from '../types/todo';
+import { Filter, FilterType } from '../types/todo';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import { Container } from '@mui/material';
 import { styled } from 'styled-components';
 
 import { mockTodos } from '../mock/mockTodos';
+import { useTodos } from '../hooks/useTodos';
 
 export const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState<ITodo[]>(mockTodos);
   const [value, setValue] = useState('');
   const [filter, setFilter] = useState<FilterType>(Filter.all);
+
+  const { todos, addTodo, toggleTodo, editTodo, removeTodo, removeCompleted, getItemsLeft } =
+    useTodos(mockTodos);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -18,98 +21,19 @@ export const TodoList: React.FC = () => {
     inputRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    }
-  }, []);
-
-  useEffect(() => {
-    const storedFilter = localStorage.getItem('filter');
-    if (storedFilter) {
-      setFilter(storedFilter as FilterType);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-
-  useEffect(() => {
-    localStorage.setItem('filter', filter);
-  });
-
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setValue(event.target.value);
   };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Enter') {
-      addTodo();
+      addTodo(value);
+      setValue('');
     }
   };
 
   const handleChangeFilter = (filter: FilterType) => {
     setFilter(filter);
-  };
-
-  const addTodo = (): void => {
-    if (value) {
-      const newTodo = {
-        id: Date.now(),
-        name: value,
-        completed: false,
-      };
-      setTodos([...todos, newTodo]);
-      setValue('');
-    }
-  };
-
-  const toggleTodo = (id: number): void => {
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            completed: !todo.completed,
-          };
-        }
-        return todo;
-      }),
-    );
-  };
-
-  const editTodo = (id: number, name: string): void => {
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            name,
-          };
-        }
-        return todo;
-      }),
-    );
-  };
-
-  const removeTodo = (id: number): void => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
-
-  const getItemsLeft = () => {
-    let itemsLeft = 0;
-    todos.map((todo) => {
-      if (!todo.completed) {
-        itemsLeft++;
-      }
-    });
-    return itemsLeft;
-  };
-
-  const clearCompleted = () => {
-    setTodos(todos.filter((todo) => !todo.completed));
   };
 
   const filteredTodos = useMemo(
@@ -127,7 +51,7 @@ export const TodoList: React.FC = () => {
   );
 
   return (
-    <TodoListContainer maxWidth="sm">
+    <TodoListContainer sx={{ display: 'flex' }} maxWidth="sm">
       <Input
         placeholder="Write your todos here..."
         value={value}
@@ -161,7 +85,7 @@ export const TodoList: React.FC = () => {
             Completed
           </Button>
         </FilterButtons>
-        <ClearButton isActive={false} onClick={clearCompleted}>
+        <ClearButton isActive={false} onClick={removeCompleted}>
           Clear Completed
         </ClearButton>
       </TodoFooter>
@@ -175,6 +99,10 @@ const TodoListContainer = styled(Container)`
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   background-color: ${(props) => props.theme.colors.secondary};
+  min-height: 432px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
 
 const Input = styled.input`
@@ -182,7 +110,7 @@ const Input = styled.input`
   padding: 10px;
   border: none;
   margin-bottom: 10px;
-
+  height: 48px;
   border-bottom: 1px solid ${(props) => props.theme.colors.primary};
   background-color: ${(props) => props.theme.colors.secondary};
 `;
@@ -212,6 +140,9 @@ const TodoFooter = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  justify-self: end;
+  margin-top: auto;
 `;
 
 const ItemsLeft = styled.span`
