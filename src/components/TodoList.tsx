@@ -1,19 +1,27 @@
-import * as React from 'react';
-import { TodoItem } from './TodoItem';
-import { Filter, FilterType } from '../types/todo';
-import { useRef, useState, useEffect, useMemo } from 'react';
-import { Container } from '@mui/material';
-import { styled } from 'styled-components';
+import * as React from "react";
 
-import { mockTodos } from '../mock/mockTodos';
-import { useTodos } from '../hooks/useTodos';
+import { Filter, FilterType } from "../types/todo";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+import { Container } from "@mui/material";
+import { TodoItem } from "./TodoItem";
+import { mockTodos } from "../mock/mockTodos";
+import { styled } from "styled-components";
+import { useTodos } from "../hooks/useTodos";
 
 export const TodoList: React.FC = () => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const [filter, setFilter] = useState<FilterType>(Filter.all);
 
-  const { todos, addTodo, toggleTodo, editTodo, removeTodo, removeCompleted, getItemsLeft } =
-    useTodos(mockTodos);
+  const {
+    todos,
+    addTodo,
+    toggleTodo,
+    editTodo,
+    removeTodo,
+    removeCompleted,
+    getItemsLeft,
+  } = useTodos(mockTodos);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,10 +33,12 @@ export const TodoList: React.FC = () => {
     setValue(event.target.value);
   };
 
-  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (event.key === 'Enter') {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    if (event.key === "Enter" && value.trim() !== "") {
       addTodo(value);
-      setValue('');
+      setValue("");
     }
   };
 
@@ -47,17 +57,18 @@ export const TodoList: React.FC = () => {
         }
         return true;
       }),
-    [todos, filter],
+    [todos, filter]
   );
 
   return (
-    <TodoListContainer sx={{ display: 'flex' }} maxWidth="sm">
+    <TodoListContainer sx={{ display: "flex" }} maxWidth="sm">
       <Input
         placeholder="Write your todos here..."
         value={value}
         onKeyDown={handleKeyDown}
         onChange={handleChange}
-        ref={inputRef}></Input>
+        ref={inputRef}
+      ></Input>
 
       {filteredTodos.map((todo) => (
         <TodoItem
@@ -71,17 +82,22 @@ export const TodoList: React.FC = () => {
       <TodoFooter>
         <ItemsLeft>{getItemsLeft().toString()} item(s) left</ItemsLeft>
         <FilterButtons>
-          <Button isActive={filter === Filter.all} onClick={() => handleChangeFilter(Filter.all)}>
+          <Button
+            isActive={filter === Filter.all}
+            onClick={() => handleChangeFilter(Filter.all)}
+          >
             All
           </Button>
           <Button
             isActive={filter === Filter.active}
-            onClick={() => handleChangeFilter(Filter.active)}>
+            onClick={() => handleChangeFilter(Filter.active)}
+          >
             Active
           </Button>
           <Button
             isActive={filter === Filter.completed}
-            onClick={() => handleChangeFilter(Filter.completed)}>
+            onClick={() => handleChangeFilter(Filter.completed)}
+          >
             Completed
           </Button>
         </FilterButtons>
@@ -123,7 +139,8 @@ const Button = styled.button<{ isActive: boolean }>`
   margin-right: 10px;
   font-size: 12px;
 
-  border: ${(props) => (props.isActive ? `1px solid ${props.theme.colors.primary}` : 'none')};
+  border: ${(props) =>
+    props.isActive ? `1px solid ${props.theme.colors.primary}` : "none"};
   border-radius: 10px;
 
   &:last-child {

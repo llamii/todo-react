@@ -4,10 +4,10 @@ export interface ITodo {
   completed: boolean;
 }
 
-export type FilterType = 'all' | 'active' | 'completed';
+export type FilterType = "all" | "active" | "completed";
 
 export enum Filter {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
+  all = "all",
+  active = "active",
+  completed = "completed",
 }

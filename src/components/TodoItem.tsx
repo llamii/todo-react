@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { ITodo } from '../types/todo';
-import { Button, Checkbox } from '@mui/material';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import ClearIcon from '@mui/icons-material/Clear';
-import { styled } from 'styled-components';
+import { Button, Checkbox } from "@mui/material";
+import React, { useState } from "react";
+
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ClearIcon from "@mui/icons-material/Clear";
+import { ITodo } from "../types/todo";
+import RadioButtonUncheckedOutlinedIcon from "@mui/icons-material/RadioButtonUncheckedOutlined";
+import { styled } from "styled-components";
 
 interface ITodoItemProps extends ITodo {
   toggleTodo: (id: number) => void;
@@ -24,20 +25,23 @@ export const TodoItem: React.FC<ITodoItemProps> = (props) => {
   };
 
   const handleNameBlur = () => {
-    if (editedName.trim() !== '') {
+    if (editedName.trim() !== "") {
       editTodo(id, editedName);
     }
     setIsEditing(false);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.key === 'Escape') {
+    if (event.key === "Enter" || event.key === "Escape") {
       handleNameBlur();
     }
   };
 
   return (
-    <TodoItemWrapper onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
+    <TodoItemWrapper
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+    >
       <Checkbox
         disableRipple
         checked={completed}
@@ -55,15 +59,19 @@ export const TodoItem: React.FC<ITodoItemProps> = (props) => {
           autoFocus
         />
       ) : (
-        <TodoText isChecked={completed} onDoubleClick={() => setIsEditing(true)}>
+        <TodoText
+          isChecked={completed}
+          onDoubleClick={() => setIsEditing(true)}
+        >
           {name}
         </TodoText>
       )}
       {isHover ? (
         <DeleteButton
-          sx={{ '&:hover': { backgroundColor: 'transparent' } }}
+          sx={{ "&:hover": { backgroundColor: "transparent" } }}
           disableRipple
-          onClick={() => removeTodo(id)}>
+          onClick={() => removeTodo(id)}
+        >
           <DeleteIcon fontSize="small" />
         </DeleteButton>
       ) : null}
@@ -104,7 +112,7 @@ const TodoText = styled.span<{ isChecked: boolean }>`
   flex-grow: 1;
   margin-right: 8px;
 
-  text-decoration: ${(props) => (props.isChecked ? `line-through` : 'none')};
+  text-decoration: ${(props) => (props.isChecked ? `line-through` : "none")};
 `;
 
 const DeleteButton = styled(Button)`
@@ -115,7 +123,7 @@ const DeleteButton = styled(Button)`
     margin: 0;
 
     &:hover {
-      background-color: 'transparent';
+      background-color: "transparent";
     }
   }
 `;

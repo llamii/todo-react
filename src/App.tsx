@@ -1,14 +1,14 @@
-import GlobalStyles from '../src/styles/global';
-import { DefaultTheme, ThemeProvider } from 'styled-components';
+import { DefaultTheme, ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./styles/theme";
 
-import { lightTheme, darkTheme } from './styles/theme';
-import { TodoList } from './components/TodoList';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import styled from 'styled-components';
-import useLocalStorage from './hooks/useLocalStorage';
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import GlobalStyles from "../src/styles/global";
+import { TodoList } from "./components/TodoList";
+import styled from "styled-components";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 const App: React.FC = () => {
-  const [theme, setTheme] = useLocalStorage<DefaultTheme>('theme', lightTheme);
+  const [theme, setTheme] = useLocalStorage<DefaultTheme>("theme", lightTheme);
 
   const themeToggle = () => {
     const newTheme = theme === lightTheme ? darkTheme : lightTheme;

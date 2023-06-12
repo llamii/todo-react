@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
   * {
@@ -16,23 +16,23 @@ export default createGlobalStyle`
     font-family: Arial, sans-serif;
     font-size: 16px;
     line-height: 1.4;
-		
-		background-color: ${(props) => props.theme.colors.bg};
-		color: ${(props) => props.theme.colors.font};
 
-		h1, h2, h3, h4, h5, h6, span, button, input {
-			color: ${(props) => props.theme.colors.font}
-		}
+    background-color: ${(props) => props.theme.colors.bg};
+    color: ${(props) => props.theme.colors.font};
 
-		a {
-			cursor: pointer;
-			color: ${(props) => props.theme.colors.font};
-			text-decoration: none;
-		}
+    h1, h2, h3, h4, h5, h6, span, button, input {
+      color: ${(props) => props.theme.colors.font}
+    }
+
+    a {
+      cursor: pointer;
+      color: ${(props) => props.theme.colors.font};
+      text-decoration: none;
+    }
 
   }
 
-	*:focus {
+  *:focus {
     outline: none;
 }
 `;

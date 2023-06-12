@@ -1,8 +1,8 @@
-import { ITodo } from '../types/todo';
-import useLocalStorage from './useLocalStorage';
+import { ITodo } from "../types/todo";
+import useLocalStorage from "./useLocalStorage";
 
 export function useTodos(initialTodos: ITodo[]) {
-  const [todos, setTodos] = useLocalStorage<ITodo[]>('todos', initialTodos);
+  const [todos, setTodos] = useLocalStorage<ITodo[]>("todos", initialTodos);
 
   const addTodo = (name: string): void => {
     const newTodo = {
@@ -23,7 +23,7 @@ export function useTodos(initialTodos: ITodo[]) {
           };
         }
         return todo;
-      }),
+      })
     );
   };
 
