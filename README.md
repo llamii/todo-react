@@ -4,6 +4,9 @@ Simple React Todo App
 
 <img src="public/app-pic.png" width="60%">
 
+## Demo 
+https://todo-vanila-react.vercel.app/
+
 ## Installation
 
 ```bash
